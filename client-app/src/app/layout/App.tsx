@@ -5,11 +5,13 @@ import { Container } from 'semantic-ui-react';
 import ActivityDashboard from '../../features/activities/dashboards/ActivityDashboard';
 import { v4 as uuid} from 'uuid';
 import agent from '../api/agent';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
-  const [editMode, setEditMode] = useState<Boolean>(false)
+  const [editMode, setEditMode] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
 
   function handleSelectActivity(id: string)
   {
@@ -56,8 +58,14 @@ function App() {
           activity.dateTime = activity.dateTime.split("T")[0];
         })
         setActivities(response);
+        setLoading(false);
       })
   }, []);
+
+  if (loading)
+  {
+    return <LoadingComponent content='Loading activities'></LoadingComponent>
+  }
 
   return (
     <Fragment>
