@@ -5,11 +5,12 @@ interface Prop
 {
     activities: Activity[];
     selectSelectActivity: (id:string) => void;
+    deleteActivity: (id: string ) => void;
 }
 
 export default function ActivityList(prop : Prop)
 {
-    const {activities, selectSelectActivity} = prop;
+    const {activities, selectSelectActivity, deleteActivity} = prop;
 
     return (
         <Segment>
@@ -30,6 +31,11 @@ export default function ActivityList(prop : Prop)
                                 floated="right"
                                 content="View"
                                 color="blue"></Button>
+                                <Button
+                                onClick={() => deleteActivity(activity.id)}
+                                floated="right"
+                                content="Delete"
+                                color="red"></Button>
                             <Label basic content={activity.category}></Label>
                         </Item.Extra>
                     </Item.Content>
