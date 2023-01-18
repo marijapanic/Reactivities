@@ -21,7 +21,7 @@ export default function ActivityForm({activity: selectedActivity, closeForm, cre
         title:"",
         description: "",
         category: "",
-        dateTime: new Date(),
+        dateTime: "",
         city: "",
         venue: ""
     }
@@ -60,6 +60,7 @@ export default function ActivityForm({activity: selectedActivity, closeForm, cre
                     name="category"
                     onChange={handleInputChange}></Form.Input>
                 <Form.Input
+                    type="date"
                     placeholder="Date"
                     value={activity.dateTime}
                     name="dateTime"

@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from 'react';
-import axios from 'axios';
 import { Activity } from '../models/activity';
 import NavBar from './NavBar';
 import { Container } from 'semantic-ui-react';
 import ActivityDashboard from '../../features/activities/dashboards/ActivityDashboard';
 import { v4 as uuid} from 'uuid';
+import agent from '../api/agent';
 
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -49,10 +49,13 @@ function App() {
   }
 
   useEffect(() => {
-    axios.get<Activity[]>("http://localhost:5000/activities")
+    agent.Activities.list()
       .then(response =>
       {
-        setActivities(response.data);
+        response.forEach(activity => {
+          activity.dateTime = activity.dateTime.split("T")[0];
+        })
+        setActivities(response);
       })
   }, []);
 
