@@ -8,13 +8,16 @@ interface Prop
 {
     activities: Activity[];
     selectedActivity: Activity | undefined;
+    editMode: Boolean;
     selectSelectActivity: (id:string) => void;
     cancelSelectActivity: () => void;
+    openForm: (id: string ) => void;
+    closeForm: () => void;
 }
 
 export default function ActivityDashboard(prop : Prop)
 {
-    const {activities, selectedActivity, selectSelectActivity, cancelSelectActivity} = prop;
+    const {activities, selectedActivity, editMode, selectSelectActivity, cancelSelectActivity, openForm, closeForm} = prop;
     return (
         <Grid>
             <Grid.Column width="10">
@@ -24,9 +27,14 @@ export default function ActivityDashboard(prop : Prop)
             </Grid.Column>
             
             <Grid.Column width="6">
-                {selectedActivity ?
-                <ActivityDetails activity={selectedActivity} cancelSelectActivity={cancelSelectActivity}></ActivityDetails> : ``} 
-                <ActivityForm></ActivityForm>      
+                {selectedActivity && !editMode ?
+                <ActivityDetails
+                    activity={selectedActivity}
+                    cancelSelectActivity={cancelSelectActivity}
+                    openForm={openForm}></ActivityDetails> : ``} 
+                {editMode && 
+                <ActivityForm activity={selectedActivity} closeForm={closeForm}></ActivityForm>
+                }
             </Grid.Column>
         </Grid>
     );

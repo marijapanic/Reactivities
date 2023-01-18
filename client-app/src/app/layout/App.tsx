@@ -8,6 +8,7 @@ import ActivityDashboard from '../../features/activities/dashboards/ActivityDash
 function App() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
+  const [editMode, setEditMode] = useState<Boolean>(false)
 
   function handleSelectActivity(id: string)
   {
@@ -17,6 +18,18 @@ function App() {
   function handleCancelSelectActivity()
   {
     setSelectedActivity(undefined);
+    setEditMode(false);
+  }
+
+  function handleOpenActivityForm(id? : string)
+  {
+    id ? handleSelectActivity(id) : handleCancelSelectActivity();
+    setEditMode(true)
+  }
+
+  function handleCloseActivityForm()
+  {
+    setEditMode(false);
   }
 
   useEffect(() => {
@@ -29,13 +42,17 @@ function App() {
 
   return (
     <Fragment>
-      <NavBar></NavBar>
+      <NavBar handleOpenActivityForm={handleOpenActivityForm}></NavBar>
       <Container style={{marginTop: "7em"}}>
         <ActivityDashboard
           activities={activities}
           selectedActivity={selectedActivity}
           selectSelectActivity={handleSelectActivity}
-          cancelSelectActivity={handleCancelSelectActivity}></ActivityDashboard>
+          cancelSelectActivity={handleCancelSelectActivity}
+          editMode={editMode}
+          openForm={handleOpenActivityForm}
+          closeForm={handleCloseActivityForm}
+          ></ActivityDashboard>
       </Container>
     </Fragment>
   );
