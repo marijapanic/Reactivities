@@ -22,14 +22,34 @@ axios.interceptors.response.use(async (response) =>
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;
 
 const requests = {
-    get: <T> (url: string) => axios.get<T>(url).then(responseBody),
-    post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    delete: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    get: async <T> (url: string) =>
+    {
+       const response = await axios.get<T>(url);
+       return responseBody(response);
+    },
+    post: async <T> (url: string, body: {}) =>
+    {
+        const response = await axios.post<T>(url, body)
+        return responseBody(response);
+    },
+    put: async <T> (url: string, body: {}) =>
+    {
+        const response = await axios.put<T>(url, body)
+        return responseBody(response);
+    },
+    delete: async <T> (url: string) =>
+    {
+        const response = await axios.delete<T>(url);
+        return responseBody(response);
+    },
 }
 
 const Activities = {
-    list: () => requests.get<Activity[]>("/activities")
+    list: async () => await requests.get<Activity[]>("/activities"),
+    details: async (id: string) => await requests.get<Activity>(`/activity/${id}`),
+    create: async (activity: Activity) => await requests.post<void>(`/activities`, activity),
+    update: async (activity:Activity) => await requests.post<void>(`/activities/${activity.id}`, activity),
+    delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
 }
 
 const agent = {

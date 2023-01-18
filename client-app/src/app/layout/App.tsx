@@ -12,6 +12,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
   const [editMode, setEditMode] = useState<Boolean>(false);
   const [loading, setLoading] = useState<Boolean>(true);
+  const [submitting, setSubmitting] = useState<Boolean>(false);
 
   function handleSelectActivity(id: string)
   {
@@ -35,14 +36,24 @@ function App() {
     setEditMode(false);
   }
 
-  function handleCreateOrEditActivity(activity: Activity)
+  async function handleCreateOrEditActivity(activity: Activity)
   {
-    activity.id
-      ? setActivities([...activities.filter(x => x.id !== activity.id), activity])
-      : setActivities([...activities, {...activity, id: uuid()}]);
+    setSubmitting(true);
+    if (activity.id)
+    {
+      await agent.Activities.update(activity);
+      setActivities([...activities.filter(x => x.id !== activity.id), activity]);
 
-      setEditMode(false);
-      setSelectedActivity(activity);
+    }
+    else
+    {
+      activity.id = uuid();
+      await agent.Activities.create(activity);
+      setActivities([...activities, activity]);
+    }
+    setSelectedActivity(activity);
+    setEditMode(false);
+    setSubmitting(false);
   }
 
   function handleDeleteActivity(id: String)
@@ -62,7 +73,7 @@ function App() {
       })
   }, []);
 
-  if (loading)
+  if (loading || submitting)
   {
     return <LoadingComponent content='Loading activities'></LoadingComponent>
   }
@@ -81,6 +92,7 @@ function App() {
           closeForm={handleCloseActivityForm}
           createOrEdit={handleCreateOrEditActivity}
           deleteActivity={handleDeleteActivity}
+          submitting={submitting}
           ></ActivityDashboard>
       </Container>
     </Fragment>

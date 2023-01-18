@@ -4,18 +4,13 @@ import { Activity } from "../../../app/models/activity";
 
 interface Props {
     activity: Activity | undefined;
+    submitting: boolean;
     closeForm: () => void;
     createOrEdit: (activity: Activity) => void;
 }
 
-export default function ActivityForm({activity: selectedActivity, closeForm, createOrEdit} : Props)
+export default function ActivityForm({activity: selectedActivity, submitting, closeForm, createOrEdit} : Props)
 {
-    // const [title, setTitle] = useState<string>(activity ? activity.title : "");
-    // const [description, setDescription] = useState<string>(activity ? activity.description : "");
-    // const [category, setCategory] = useState<string>(activity ? activity.category : "");
-    // const [date, setDate] = useState<Date>(activity ? activity.dateTime : new Date());
-    // const [city, setCity] = useState<string>(activity ? activity.city : "");
-    // const [venue, setVenue] = useState<string>(activity ? activity.venue : "");
     const initialState = selectedActivity ?? {
         id:"",
         title:"",
@@ -75,7 +70,7 @@ export default function ActivityForm({activity: selectedActivity, closeForm, cre
                     value={activity.venue}
                     name="venue"
                     onChange={handleInputChange}></Form.Input>
-                <Button onClick={handleSubmit} floated="right" positive type="submit" content="Submit"></Button>
+                <Button loading={submitting} onClick={handleSubmit} floated="right" positive type="submit" content="Submit"></Button>
                 <Button onClick={closeForm} floated="right" type="button" content="Cancel"></Button>
             </Form>
         </Segment>
