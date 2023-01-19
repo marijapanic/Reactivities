@@ -12,7 +12,7 @@ function App() {
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
   const [editMode, setEditMode] = useState<Boolean>(false);
   const [loading, setLoading] = useState<Boolean>(true);
-  const [submitting, setSubmitting] = useState<Boolean>(false);
+  const [submitting, setSubmitting] = useState(false);
 
   function handleSelectActivity(id: string)
   {
@@ -56,9 +56,12 @@ function App() {
     setSubmitting(false);
   }
 
-  function handleDeleteActivity(id: String)
+  async function handleDeleteActivity(id: string)
   {
+    setSubmitting(true);
+    await agent.Activities.delete(id);
     setActivities([...activities.filter(x => x.id !== id)]);
+    setSubmitting(false);
   }
 
   useEffect(() => {
@@ -73,7 +76,7 @@ function App() {
       })
   }, []);
 
-  if (loading || submitting)
+  if (loading)
   {
     return <LoadingComponent content='Loading activities'></LoadingComponent>
   }

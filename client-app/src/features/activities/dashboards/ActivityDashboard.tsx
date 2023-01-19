@@ -38,6 +38,7 @@ export default function ActivityDashboard(prop : Prop)
             <Grid.Column width="10">
                 <ActivityList
                     activities={activities}
+                    submitting={submitting}
                     selectSelectActivity={selectSelectActivity}
                     deleteActivity={deleteActivity}></ActivityList>
             </Grid.Column>
