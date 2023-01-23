@@ -13,31 +13,7 @@ function App() {
   const {activityStore} = useStore();
 
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
-  const [editMode, setEditMode] = useState<Boolean>(false);
   const [submitting, setSubmitting] = useState(false);
-
-  function handleSelectActivity(id: string)
-  {
-    setSelectedActivity(activities.find(activity => activity.id === id));
-  }
-
-  function handleCancelSelectActivity()
-  {
-    setSelectedActivity(undefined);
-    setEditMode(false);
-  }
-
-  function handleOpenActivityForm(id? : string)
-  {
-    id ? handleSelectActivity(id) : handleCancelSelectActivity();
-    setEditMode(true)
-  }
-
-  function handleCloseActivityForm()
-  {
-    setEditMode(false);
-  }
 
   async function handleCreateOrEditActivity(activity: Activity)
   {
@@ -54,8 +30,8 @@ function App() {
       await agent.Activities.create(activity);
       setActivities([...activities, activity]);
     }
-    setSelectedActivity(activity);
-    setEditMode(false);
+    activityStore.selectActivity(activity.id);
+    activityStore.closeForm();
     setSubmitting(false);
   }
 
@@ -78,16 +54,10 @@ function App() {
 
   return (
     <Fragment>
-      <NavBar handleOpenActivityForm={handleOpenActivityForm}></NavBar>
+      <NavBar></NavBar>
       <Container style={{marginTop: "7em"}}>
         <ActivityDashboard
           activities={activityStore.activities}
-          selectedActivity={selectedActivity}
-          selectSelectActivity={handleSelectActivity}
-          cancelSelectActivity={handleCancelSelectActivity}
-          editMode={editMode}
-          openForm={handleOpenActivityForm}
-          closeForm={handleCloseActivityForm}
           createOrEdit={handleCreateOrEditActivity}
           deleteActivity={handleDeleteActivity}
           submitting={submitting}
