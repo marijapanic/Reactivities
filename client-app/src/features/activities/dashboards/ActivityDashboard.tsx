@@ -10,7 +10,6 @@ interface Prop
 {
     activities: Activity[];
     submitting: boolean;
-    createOrEdit: (activity: Activity) => void;
     deleteActivity: (id: string ) => void;
 }
 
@@ -19,7 +18,6 @@ function ActivityDashboard(prop : Prop)
     const {
         activities,
         submitting,
-        createOrEdit,
         deleteActivity
     } = prop;
 
@@ -37,11 +35,7 @@ function ActivityDashboard(prop : Prop)
             <Grid.Column width="6">
                 {activityStore.selectedActivity && !activityStore.editMode ?
                 <ActivityDetails></ActivityDetails> : ``} 
-                {activityStore.editMode && 
-                <ActivityForm
-                    submitting={submitting}
-                    createOrEdit={createOrEdit}></ActivityForm>
-                }
+                {activityStore.editMode && <ActivityForm></ActivityForm>}
             </Grid.Column>
         </Grid>
     );
