@@ -3,6 +3,7 @@ import { useState, SyntheticEvent } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
+import { Link } from "react-router-dom";
 
 export default observer(function ActivityList()
 {
@@ -30,7 +31,8 @@ export default observer(function ActivityList()
                         </Item.Description>
                         <Item.Extra>
                             <Button
-                                onClick={() => activityStore.selectActivity(activity.id)}
+                                as={Link}
+                                to={`/activities/${activity.id}`}
                                 floated="right"
                                 content="View"
                                 color="blue"></Button>

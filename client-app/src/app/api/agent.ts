@@ -46,7 +46,7 @@ const requests = {
 
 const Activities = {
     list: async () => await requests.get<Activity[]>("/activities"),
-    details: async (id: string) => await requests.get<Activity>(`/activity/${id}`),
+    details: async (id: string) => await requests.get<Activity>(`/activities/${id}`),
     create: async (activity: Activity) => await requests.post<void>(`/activities`, activity),
     update: async (activity: Activity) => await requests.put<void>(`/activities/${activity.id}`, activity),
     delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
