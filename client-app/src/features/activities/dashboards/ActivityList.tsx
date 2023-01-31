@@ -1,5 +1,6 @@
+import { Fragment } from 'react';
 import { observer } from "mobx-react-lite";
-import { Item, Segment } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import ActivityListItem from "./ActivityListItem";
@@ -7,17 +8,20 @@ import ActivityListItem from "./ActivityListItem";
 export default observer(function ActivityList()
 {
     const { activityStore } = useStore();
-    const { activitiesByDate, } = activityStore;
+    const { groupedActivities} = activityStore;
 
     return (
-        <Segment>
-            <Item.Group divided>
-            {activitiesByDate.map((activity: Activity) =>
+        <>
+            {groupedActivities.map(([group, activities]) =>
                 (
-                    <ActivityListItem key={activity.id} activity={activity}></ActivityListItem>
+                    <Fragment key={group}>
+                        <Header sub color="teal">{group}</Header>
+                        {activities.map((activity: Activity) =>
+                            (
+                                <ActivityListItem key={activity.id} activity={activity}></ActivityListItem>
+                            ))}
+                    </Fragment>
                 ))}
-            </Item.Group>
-        </Segment>
-
+        </>
     );
 });
