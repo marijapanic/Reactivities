@@ -45,14 +45,23 @@ export default class ActivityStore
 
     loadActivity = async (id: string) => {
         let activity = this.getActivity(id);
-        if (activity) this.selectedActivity = activity;
+        if (activity)
+        {
+            this.selectedActivity = activity;
+
+            return activity;
+        }
 
         try {
             this.setLoadingInitial(true);
             activity = await agent.Activities.details(id);
             this.setActivity(activity);
-            this.selectedActivity = activity;
+            runInAction(() =>
+            {
+                this.selectedActivity = activity;
+            })
             this.setLoadingInitial(false);
+            return activity;
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
