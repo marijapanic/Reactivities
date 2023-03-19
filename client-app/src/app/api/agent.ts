@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { Activity } from "../models/activity";
+import { User, UserFormValues } from "../models/user";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
 
@@ -10,6 +11,7 @@ const sleep = (delay: number) =>
 }
 
 axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
 
 axios.interceptors.response.use(async (response) => 
 {
@@ -65,6 +67,16 @@ axios.interceptors.response.use(async (response) =>
 
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;
 
+// axios.interceptors.request.use(config => {
+//     const token = store.commonStore.token;
+//     if (token && config.headers)
+//     {
+//         config.headers = { ...config.headers } as AxiosHeaders;
+//         config.headers['Authorization'] = `Bearer ${token}`;
+//     }
+//     return config;
+// });
+
 const requests = {
     get: async <T> (url: string) =>
     {
@@ -96,8 +108,15 @@ const Activities = {
     delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
 }
 
+const Account = {
+    current: async () => await requests.get<User>("/account"),
+    login: async (user: UserFormValues) => await requests.post<User>("/account/login", user),
+    register: async (user: UserFormValues) => await requests.post<User>("/account/register", user),
+}
+
 const agent = {
-    Activities
+    Activities,
+    Account
 }
 
 export default agent;
