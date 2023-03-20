@@ -3,7 +3,6 @@ using Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace API.Extensions

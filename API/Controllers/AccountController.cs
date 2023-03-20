@@ -58,7 +58,7 @@ namespace API.Controllers
 
             var user = new AppUser
             {
-                DisplayName= registerDto.DisplayName,
+                DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
                 UserName = registerDto.Username
             };
@@ -75,7 +75,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
-        { 
+        {
             var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserObject(user);

@@ -12,7 +12,7 @@ namespace API.Middleware
 
         public ExceptionMiddlewaare(RequestDelegate next, ILogger<ExceptionMiddlewaare> logger, IHostEnvironment env)
         {
-            _next=next;
+            _next = next;
             _logger = logger;
             _env = env;
         }
