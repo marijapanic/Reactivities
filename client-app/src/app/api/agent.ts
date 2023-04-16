@@ -106,6 +106,7 @@ const Activities = {
     create: async (activity: Activity) => await requests.post<void>(`/activities`, activity),
     update: async (activity: Activity) => await requests.put<void>(`/activities/${activity.id}`, activity),
     delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
+    attend: async (id: string) => await requests.post<void>(`/activities/${id}/attend`, {})
 }
 
 const Account = {
