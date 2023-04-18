@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { Activity } from "../models/activity";
+import { Activity, ActivityFormValues } from "../models/activity";
 import { User, UserFormValues } from "../models/user";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
@@ -103,8 +103,8 @@ const requests = {
 const Activities = {
     list: async () => await requests.get<Activity[]>("/activities"),
     details: async (id: string) => await requests.get<Activity>(`/activities/${id}`),
-    create: async (activity: Activity) => await requests.post<void>(`/activities`, activity),
-    update: async (activity: Activity) => await requests.put<void>(`/activities/${activity.id}`, activity),
+    create: async (activity: ActivityFormValues) => await requests.post<void>(`/activities`, activity),
+    update: async (activity: ActivityFormValues) => await requests.put<void>(`/activities/${activity.id}`, activity),
     delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
     attend: async (id: string) => await requests.post<void>(`/activities/${id}/attend`, {})
 }

@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import { Activity } from "../../../app/models/activity";
+import { ActivityFormValues } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import TextInput from "../../../app/common/form/TextInput";
 import TextArea from "../../../app/common/form/TextArea";
@@ -20,22 +20,13 @@ export default observer(function ActivityForm()
     const {
         createActivity,
         updateActivity,
-        loading,
         loadActivity,
         loadingInitial
     } = activityStore;
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [activity, setActivity] = useState<Activity>({
-        id:"",
-        title:"",
-        description: "",
-        category: "",
-        dateTime: null,
-        city: "",
-        venue: ""
-    });
+    const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
         title: Yup.string().required("The title is requeried TextInput."),
@@ -51,11 +42,11 @@ export default observer(function ActivityForm()
         if (id)
         {
             loadActivity(id)
-            .then(activity => setActivity(activity!));
+            .then(activity => setActivity(new ActivityFormValues(activity)));
         }
     }, [id, loadActivity]);
 
-    function handleFormSubmit(activity: Activity)
+    function handleFormSubmit(activity: ActivityFormValues)
     {
         if (activity.id)
         {
@@ -104,7 +95,7 @@ export default observer(function ActivityForm()
                         <TextInput placeholder="Venue" name="venue"></TextInput>
                         <Button
                             disabled={isSubmitting || !isValid || !dirty}
-                            loading={loading}
+                            loading={isSubmitting}
                             floated="right"
                             positive
                             type="submit"
