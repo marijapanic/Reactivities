@@ -26,7 +26,9 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LogInDto logInDto)
         {
-            var user = await _userManager.FindByEmailAsync(logInDto.Email);
+            var user = await _userManager.Users
+                .Include(x=> x.Photos)
+                .FirstOrDefaultAsync(x => x.Email == logInDto.Email);
             if (user == null) return Unauthorized();
 
             var result = await _userManager.CheckPasswordAsync(user, logInDto.Password);
@@ -76,7 +78,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.Users
+                .Include(x => x.Photos)
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserObject(user);
         }
@@ -86,7 +90,7 @@ namespace API.Controllers
             return new UserDto
             {
                 Displayname = user.DisplayName,
-                Image = null,
+                Image = user.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
                 Token = _tokenService.GetToken(user),
                 Username = user.UserName
             };
