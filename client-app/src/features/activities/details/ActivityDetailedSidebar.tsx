@@ -1,20 +1,14 @@
-import { Segment, List, Label, Item, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
-import { Activity } from '../../../app/models/activity';
+import { Segment, List, Label, Item, Image } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
+import { Activity } from '../../../app/models/activity'
 
 interface Props {
     activity: Activity;
 }
-export default observer(function ActivityDetailedSidebar ({
-    activity: {
-        attendees,
-        host
-    }
-} : Props) {
-    
-    if (!attendees) return null;
 
+export default observer(function ActivityDetailedSidebar({ activity: { attendees, host } }: Props) {
+    if (!attendees) return null;
     return (
         <>
             <Segment
@@ -25,7 +19,7 @@ export default observer(function ActivityDetailedSidebar ({
                 inverted
                 color='teal'
             >
-                {attendees.length} {attendees.length === 1 ? "Person" : "People"}
+                {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} going
             </Segment>
             <Segment attached>
                 <List relaxed divided>
@@ -44,6 +38,8 @@ export default observer(function ActivityDetailedSidebar ({
                                 <Item.Header as='h3'>
                                     <Link to={`/profile/${attendee.username}`}>{attendee.displayName}</Link>
                                 </Item.Header>
+                                {attendee.following &&
+                                <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>}
                             </Item.Content>
                         </Item>
                     ))}
@@ -54,4 +50,3 @@ export default observer(function ActivityDetailedSidebar ({
 
     )
 })
-

@@ -1,4 +1,3 @@
-import React from 'react';
 import {Tab, Grid, Header, Card} from "semantic-ui-react";
 import ProfileCard from "./ProfileCard";
 import {useStore} from "../../app/stores/store";
@@ -15,11 +14,13 @@ export default observer(function ProfileFollowings() {
                     <Header
                         floated='left'
                         icon='user'
-                        content={activeTab === 3 ? `People following ${profile!.displayName}` : `People ${profile?.displayName} is following`}
+                        content={activeTab === 3 
+                            ? `People following ${profile!.displayName}` 
+                            : `People ${profile?.displayName} is following`}
                     />
                 </Grid.Column>
                 <Grid.Column width='16'>
-                    <Card.Group itemsPerRow={4}>
+                    <Card.Group itemsPerRow='5'>
                         {followings.map(profile => (
                             <ProfileCard key={profile.username} profile={profile} />
                         ))}

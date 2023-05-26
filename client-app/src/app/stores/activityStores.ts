@@ -108,7 +108,7 @@ export default class ActivityStore
         this.loadingInitial = state;
     }
 
-    createActivity = async (activity: Activity) =>
+    createActivity = async (activity: ActivityFormValues) =>
     {
         const user = store.userStore.user;
         const attendee = new Profile(user!);
@@ -217,6 +217,17 @@ export default class ActivityStore
         } finally {
             runInAction(() => this.loading = false);
         }
+    }
+
+    updateAttendeeFollowing = (username: string) => {
+        this.activityRegistry.forEach(activity => {
+            activity.attendees.forEach(attendee => {
+                if (attendee.username === username) {
+                    attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+                    attendee.following = !attendee.following;
+                }
+            })
+        })
     }
 
     clearSelectedActivity = () => {
