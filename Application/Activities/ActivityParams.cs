@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Core;
+﻿using Application.Core;
 
 namespace Application.Activities
 {

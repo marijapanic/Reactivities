@@ -1,7 +1,6 @@
 ﻿using Application.Activities;
 using Application.Comments;
 using Application.Profiles;
-using AutoMapper;
 using Domain;
 
 namespace Application.Core

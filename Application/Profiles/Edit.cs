@@ -1,7 +1,5 @@
 ﻿using Application.Core;
 using Application.Interfaces;
-using AutoMapper;
-using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +36,7 @@ namespace Application.Profiles
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var profile = await _context.Users.FirstOrDefaultAsync(x=> x.UserName == _userAccessor.GetUserName());
+                var profile = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
 
                 if (profile == null)
                 {

@@ -30,7 +30,7 @@ namespace Application.Activities
                 var query = _context.Activities
                     .Where(x => x.DateTime >= request.Params.StartDate)
                     .OrderBy(x => x.DateTime)
-                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUserName  = _userAccessor.GetUserName()})
+                    .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new { currentUserName = _userAccessor.GetUserName() })
                     .AsQueryable();
 
                 if (request.Params.IsGoing && !request.Params.IsHost)

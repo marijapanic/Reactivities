@@ -3,7 +3,6 @@ using Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using SQLitePCL;
 
 namespace Application.Photos
 {
