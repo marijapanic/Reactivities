@@ -36,18 +36,13 @@ namespace Application.Profiles
                             .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
                             .AsQueryable();
 
-                switch (request.Predicate)
+                query = request.Predicate switch
                 {
-                    case "past":
-                        query.Where(x => x.DateTime <= DateTime.Now);
-                        break;
-                    case "hosting":
-                        query.Where(x => x.HostUsername == request.Username);
-                        break;
-                    default:
-                        query.Where(x => x.DateTime >= DateTime.Now);
-                        break;
-                }
+                    "past" => query.Where(a => a.DateTime <= DateTime.Now),
+                    "hosting" => query.Where(a => a.HostUsername ==
+                   request.Username),
+                    _ => query.Where(a => a.DateTime >= DateTime.Now)
+                };
 
 
                 var activities = await query.ToListAsync();
