@@ -33,6 +33,12 @@ namespace Application.Core
                 .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
                 .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
                 .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(a => a.Observer.UserName == currentUserName)));
+            CreateMap<ActivityAttendee, UserActivityDto>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Activity.Id))
+                .ForMember(d => d.DateTime, o => o.MapFrom(s => s.Activity.DateTime))
+                .ForMember(d => d.Title, o => o.MapFrom(s => s.Activity.Title))
+                .ForMember(d => d.Category, o => o.MapFrom(s => s.Activity.Category))
+                .ForMember(d => d.HostUsername, o => o.MapFrom(s => s.Activity.Attendees.FirstOrDefault(a => a.IsHost).AppUser.UserName));
         }
     }
 }
