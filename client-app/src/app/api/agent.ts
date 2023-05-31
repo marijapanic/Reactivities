@@ -12,12 +12,15 @@ const sleep = (delay: number) =>
     return new Promise(resolve => setTimeout(resolve, delay));
 }
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('jwt')}`;
 
 axios.interceptors.response.use(async (response) => 
 {
-    await sleep(1000);
+    if (process.env.NODE_ENV === "development")
+    {
+        await sleep(1000);
+    }
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -114,21 +117,21 @@ const Activities = {
 
        return responseBody(response);
     },
-    details: async (id: string) => await requests.get<Activity>(`/activities/${id}`),
-    create: async (activity: ActivityFormValues) => await requests.post<void>(`/activities`, activity),
-    update: async (activity: ActivityFormValues) => await requests.put<void>(`/activities/${activity.id}`, activity),
-    delete: async (id: string) => await requests.delete<void>(`/activities/${id}`),
-    attend: async (id: string) => await requests.post<void>(`/activities/${id}/attend`, {})
+    details: async (id: string) => await requests.get<Activity>(`activities/${id}`),
+    create: async (activity: ActivityFormValues) => await requests.post<void>(`activities`, activity),
+    update: async (activity: ActivityFormValues) => await requests.put<void>(`activities/${activity.id}`, activity),
+    delete: async (id: string) => await requests.delete<void>(`activities/${id}`),
+    attend: async (id: string) => await requests.post<void>(`activities/${id}/attend`, {})
 }
 
 const Account = {
-    current: async () => await requests.get<User>("/account"),
-    login: async (user: UserFormValues) => await requests.post<User>("/account/login", user),
-    register: async (user: UserFormValues) => await requests.post<User>("/account/register", user),
+    current: async () => await requests.get<User>("account"),
+    login: async (user: UserFormValues) => await requests.post<User>("account/login", user),
+    register: async (user: UserFormValues) => await requests.post<User>("account/register", user),
 }
 
 const Profiles = {
-    get: async (username: string) => await requests.get<Profile>(`/profiles/${username}`),
+    get: async (username: string) => await requests.get<Profile>(`profiles/${username}`),
     uploadPhoto: (file: Blob) => {
         let formData = new FormData();
         formData.append('File', file);
@@ -136,14 +139,14 @@ const Profiles = {
             headers: { 'Content-type': 'multipart/form-data' }
         })
     },
-    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
-    deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
-    updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
-    updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
+    setMainPhoto: (id: string) => requests.post(`photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.delete(`photos/${id}`),
+    updateProfile: (profile: Partial<Profile>) => requests.put(`profiles`, profile),
+    updateFollowing: (username: string) => requests.post(`follow/${username}`, {}),
     listFollowings: (username: string, predicate: string) =>
-        requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
+        requests.get<Profile[]>(`follow/${username}?predicate=${predicate}`),
     listActivities: (username: string, predicate: string) =>
-        requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
+        requests.get<UserActivity[]>(`profiles/${username}/activities?predicate=${predicate}`)
 }
 
 const agent = {
